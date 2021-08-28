@@ -1,3 +1,4 @@
+import { SignInComponent } from './../components/sign-in/sign-in.component';
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -14,6 +15,12 @@ import { TabsPage } from './tabs.page';
     FormsModule,
     TabsPageRoutingModule
   ],
-  declarations: [TabsPage]
+  declarations: [
+    TabsPage,
+    SignInComponent
+  ],
+  entryComponents: [
+    SignInComponent
+  ]
 })
 export class TabsPageModule {}

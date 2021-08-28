@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Binarex</string>
+    <string name="title_activity_main">Binarex</string>
+    <string name="package_name">com.binarex.app</string>
+    <string name="custom_url_scheme">com.binarex.app</string>
+    <string name="server_client_id">727209895183-atcrcgnkuvtrt8gim87ate51h33d34cc.apps.googleusercontent.com</string>
+</resources>

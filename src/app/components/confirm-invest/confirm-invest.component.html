@@ -1,0 +1,126 @@
+<ion-header>
+  <ion-toolbar>
+    <div class="flex vertical">
+      <ion-label>Confirma tus datos</ion-label>
+    </div>
+    <ion-icon slot="end" class="startFloating" 
+      name="close-outline" (click)="close()" size="large">
+    </ion-icon>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="light">
+  
+  <ion-card class="ion-no-margin" *ngIf="fullUser" style="margin: 5%;">
+    <ion-item>
+      <div class="flex vertical3">
+        <div class="flex horizontal4">
+          <ion-text>Nombre</ion-text>
+          <ion-textarea class="ion-text-end"
+            [(ngModel)]="fullUser.displayName"
+            rows="1"
+            required
+            placeholder="Quien recibirá el pedido">
+          </ion-textarea>
+        </div>
+      </div>
+    </ion-item>
+  
+    <ion-item>
+      <div class="flex vertical3">
+        <div class="flex horizontal4">
+          <ion-text>Teléfono</ion-text>
+          <ion-textarea class="ion-text-end"
+            [(ngModel)]="fullUser.phoneNumber"
+            rows="1"
+            debounce="500"
+            required
+            placeholder="Para contactarte">
+          </ion-textarea>
+        </div>
+      </div>
+    </ion-item>
+
+    <ion-item>
+      <div class="flex vertical3">
+        <div class="flex horizontal4">
+          <ion-text>Correo</ion-text>
+          <ion-textarea class="ion-text-end"
+            [(ngModel)]="fullUser.email"
+            rows="1"
+            debounce="500"
+            required
+            placeholder="Para contactarte">
+          </ion-textarea>
+        </div>
+      </div>
+    </ion-item>
+  
+    <ion-item *ngIf="fullUser && countries.length > 0">
+      <div class="flex vertical3">
+        <div class="flex horizontal4">
+          <ion-text>País</ion-text>
+          <ion-select placeholder="País" style="padding-left: 0; padding-right: 0;"
+            [(ngModel)]="fullUser.country">
+            <ion-select-option *ngFor="let item of countries" [value]="item">
+              {{ item }}
+            </ion-select-option>
+          </ion-select>
+        </div>
+      </div>
+    </ion-item>
+  
+<!--     <ion-item *ngIf="fullUser && cities.length > 0">
+      <div class="flex vertical3">
+        <div class="flex horizontal4">
+          <ion-text>Ciudad</ion-text>
+          <ion-select placeholder="Ciudad" class="borderInput" style="padding-left: 0; padding-right: 0;"
+            [(ngModel)]="fullUser.city">
+            <ion-select-option *ngFor="let item of cities" [value]="item">
+              {{ item }}
+            </ion-select-option>
+          </ion-select>
+        </div>
+      </div>
+    </ion-item> -->
+  
+    <ion-item>
+      <div class="flex vertical3">
+        <div class="flex horizontal4">
+          <ion-text>Dirección</ion-text>
+          <ion-textarea class="ion-text-end"
+          [(ngModel)]="fullUser.address"
+            rows="1"
+            debounce="500"
+            required
+            placeholder="Dirección destino">
+          </ion-textarea>
+        </div>
+      </div>
+    </ion-item>
+    <br>
+  </ion-card>
+
+</ion-content>
+
+<!-- <ion-footer *ngIf="fullUser && fullUser.state === null">
+  <ion-toolbar color="primary" *ngIf="fullUser && !fullUser.state">
+    <ion-button (click)="confirmOrder()" color="light" expand="block" fill="clear" shape="round">
+      <ion-icon color="light" slot="start" name="shield-checkmark"></ion-icon>
+      <ion-text color="light">
+        Confirmar pedido por COP {{ (total + domicilio - bonus) | currency:'$':'symbol':'1.0-0' }}
+      </ion-text>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer> -->
+
+<ion-footer >
+  <ion-toolbar color="primary">
+    <ion-button color="light" expand="block" fill="clear" shape="round" (click)="confirmOrder()">
+      <ion-icon color="light" slot="start" name="shield-checkmark"></ion-icon>
+      <ion-text color="light">
+       Confirmar inversión de COP
+      </ion-text>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

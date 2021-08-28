@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>727209895183-hj5s7n060k6btjqh9f72jb2vp9dumvc6.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.727209895183-hj5s7n060k6btjqh9f72jb2vp9dumvc6</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>727209895183-96ntiblj0itdvtm76p2vp9k1ullj0e2h.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDeEUU61Cj4UWj2Xjhv8AYVDHmoP1YBQqQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>727209895183</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.binarex.app</string>
+	<key>PROJECT_ID</key>
+	<string>binarex-2021</string>
+	<key>STORAGE_BUCKET</key>
+	<string>binarex-2021.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:727209895183:ios:efcce82e428a55d150ca7a</string>
+</dict>
+</plist>

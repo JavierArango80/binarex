@@ -1,0 +1,121 @@
+<ion-header translucent class="ion-no-border">
+  <ion-toolbar>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="1">
+          <ion-icon name="chevron-back-outline" style="font-size: x-large;" (click)="close()"></ion-icon>
+        </ion-col>
+        <ion-col size="10" style="text-align: center;">
+          Métodos de pago
+        </ion-col>
+        <ion-col size="1">
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="bank">
+
+  <div style="margin-top: 25px;" *ngIf="newPaymentMethod">
+    <ion-text color="medium" class="ion-margin">
+      Nombre del titular
+    </ion-text>
+
+    <ion-item class="ion-margin" color="light" style="border-radius: 5%;" lines="none">
+      <ion-input
+        clear-input
+        placeholder="Como aparece en la tarjeta"
+        [(ngModel)]="newPaymentMethod.owner"
+        style="margin-top: 8px;">
+      </ion-input>
+    </ion-item>
+  </div>
+
+  <div style="margin-top: 25px;" *ngIf="paymentMethods && newPaymentMethod">
+    <ion-text color="medium" class="ion-margin">
+      Tipo de documento de identidad
+    </ion-text>
+
+    <ion-item class="ion-margin" color="light" style="border-radius: 5%;" lines="none" *ngIf="variables">
+      <ion-select placeholder="Con el que registró la cuenta" style="padding-left: 0; padding-right: 0; width: 100%;"
+      [(ngModel)]="newPaymentMethod.ownerIdType">
+      <ion-select-option *ngFor="let item of variables.documentTypes" [value]="item">
+        {{ item }}
+      </ion-select-option>
+    </ion-select>
+    </ion-item>
+  </div>
+
+  <div style="margin-top: 25px;" *ngIf="newPaymentMethod && newPaymentMethod.ownerIdType">
+    <ion-text color="medium" class="ion-margin">
+      Número de identificación
+    </ion-text>
+
+    <ion-item class="ion-margin" color="light" style="border-radius: 5%;" lines="none">
+      <ion-input
+        clear-input
+        placeholder="Con el que registró la cuenta"
+        [(ngModel)]="newPaymentMethod.ownerId"
+        style="margin-top: 8px;">
+      </ion-input>
+    </ion-item>
+  </div>
+
+  <div style="margin-top: 25px;" *ngIf="paymentMethods && newPaymentMethod">
+    <ion-text color="medium" class="ion-margin">
+      Banco
+    </ion-text>
+
+    <ion-item class="ion-margin" color="light" style="border-radius: 5%;" lines="none" *ngIf="variables">
+      <ion-select placeholder="Banco" style="padding-left: 0; padding-right: 0; width: 100%;"
+      [(ngModel)]="newPaymentMethod.bank">
+      <ion-select-option *ngFor="let item of variables.banks" [value]="item">
+        {{ item }}
+      </ion-select-option>
+    </ion-select>
+    </ion-item>
+  </div>
+
+  <div style="margin-top: 25px;" *ngIf="newPaymentMethod">
+    <ion-text color="medium" class="ion-margin">
+      Número de cuenta
+    </ion-text>
+
+    <ion-item class="ion-margin" color="light" style="border-radius: 5%;" lines="none">
+      <ion-input
+        clear-input
+        type="number"
+        inputmode="numeric"
+        placeholder="Ingrese el número de la cuenta"
+        [(ngModel)]="newPaymentMethod.accountNumber"
+        style="margin-top: 8px;">
+      </ion-input>
+    </ion-item>
+  </div>
+
+  <div style="margin-top: 25px;" *ngIf="paymentMethods && newPaymentMethod">
+    <ion-text color="medium" class="ion-margin">
+      Tipo de cuenta
+    </ion-text>
+
+    <ion-item class="ion-margin" color="light" style="border-radius: 5%;" lines="none">
+      <ion-select style="padding-left: 0; padding-right: 0; width: 100%;"
+        [(ngModel)]="newPaymentMethod.type">
+        <ion-select-option *ngFor="let item of paymentMethods" [value]="item">
+          {{ item }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar *ngIf="newPaymentMethod">
+    <ion-button (click)="confirm()" expand="block" color="primary" style="margin-left: 10%; margin-right: 10%;"
+      [disabled]="!newPaymentMethod.type || !newPaymentMethod.bank || !newPaymentMethod.accountNumber || !newPaymentMethod.owner || !newPaymentMethod.ownerId">
+      Agregar método de pago
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

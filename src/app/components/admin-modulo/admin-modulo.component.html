@@ -1,0 +1,260 @@
+<ion-header>
+  <ion-toolbar style="padding-right: 2%;">
+    <ion-title>Módulo de administrador</ion-title>
+    <ion-icon slot="start" name="close-outline" (click)="close()" size="large">
+    </ion-icon>
+    <ion-icon slot="end" name="reload-outline" (click)="reload()" size="large">
+    </ion-icon>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="light">
+
+  <ion-card class="ion-no-margin" style="margin: 5%;">
+    <ion-item *ngIf="(usdt | async) as usdtPrice" >
+      <div class="flex vertical3">
+        <div class="flex horizontal4">
+          <ion-text>Precio compra USDT</ion-text>
+          <ion-textarea class="ion-text-end"
+            type="number"
+            inputmode='numeric'
+            [(ngModel)]="usdtPrice.buy"
+            (ionChange)="showUsdt()"
+            rows="1"
+            required
+            placeholder="Precio de compra de USDT">
+          </ion-textarea>
+        </div>
+      </div>
+    </ion-item>
+
+    <ion-item *ngIf="(usdt | async) as usdtPrice" style="margin-bottom: 2%;" lines="none">
+      <div class="flex vertical3">
+        <div class="flex horizontal4">
+          <ion-text>Precio venta USDT</ion-text>
+          <ion-textarea class="ion-text-end"
+            type="number"
+            [(ngModel)]="usdtPrice.sell"
+            rows="1"
+            required
+            placeholder="Precio de venta de USDT">
+          </ion-textarea>
+        </div>
+        <ion-item lines="none" *ngIf="this.variables">
+          <ion-label color="primary">Automático</ion-label>
+          <ion-toggle [(ngModel)]="this.variables.trmAut" (ionChange)="toogleTrm()"></ion-toggle>
+        </ion-item>
+      </div>
+    </ion-item>
+  </ion-card>
+
+  <ion-toolbar style="margin: 1%" *ngIf="deposits">
+    <ion-toolbar>
+      <ion-text class="ion-text-center">
+        <h4>Historial de depósitos pendientes</h4>
+      </ion-text>
+    </ion-toolbar>
+
+    <ion-card *ngFor="let item of deposits" style="margin: 3%; padding: 2%;">
+      <div class="flex horizontal4">
+        <ion-label color="primary">Usuario: </ion-label>
+        <ion-label color="primary">{{ item.user }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4">
+        <ion-label color="medium">Id: </ion-label>
+        <ion-label color="medium">{{ item.id }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4">
+        <ion-label color="medium">Fecha: </ion-label>
+        <ion-label color="medium">{{ item.time }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4">
+        <ion-label color="medium">Tipo de pago: </ion-label>
+        <ion-label color="medium">{{ item.paymentMethod }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4"*ngIf="item.paymentMethod === variables.paymentMethods[0] || item.paymentMethod === variables.paymentMethods[1]">
+        <ion-label color="medium">Banco: </ion-label>
+        <ion-label color="medium">{{ item.bank }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.cop > 0">
+        <ion-label color="medium">Monto: </ion-label>
+        <ion-label color="medium">COP {{ item.cop }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.usdt > 0">
+        <ion-label color="medium">Monto: </ion-label>
+        <ion-label color="medium">USDT {{ item.cop }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.direction">
+        <ion-label color="medium">Tipo: </ion-label>
+        <ion-label color="medium">{{ item.direction }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.timeDeposit">
+        <ion-label color="medium">Fecha: </ion-label>
+        <ion-label color="medium">{{ item.timeDeposit | date:'medium' }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.status === 'pending'">
+        <ion-label color="medium">Válido hasta: </ion-label>
+        <ion-label color="primary">{{ item.timeUntil | date:'medium' }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4">
+        <ion-label color="medium">Estado: </ion-label>
+        <ion-label color="medium">{{ item.status }}</ion-label>
+      </div>
+
+
+      <div *ngIf="!item.photoURL">
+        <br><br><br><br>
+      </div>
+
+      <div class="ion-text-center" style="margin-top: 3%;" *ngIf="item.photoURL">
+        <img [src]="item.photoURL" /> <br>
+        <a [href]="item.photoURL" target="_blank" rel="noopener">Descargar</a>
+      </div>
+
+      <ion-fab vertical="bottom" horizontal="end">
+        <ion-fab-button color="success" (click)="approve(item, 'deposit')" [disabled]="item.status === 'Aprobado'">
+          <ion-icon name="checkmark-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+
+      <ion-fab vertical="bottom" horizontal="start">
+        <ion-fab-button color="danger" (click)="reject(item, 'deposit')" [disabled]="item.status === 'Rechazado'">
+          <ion-icon name="close-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </ion-card>
+
+  </ion-toolbar>
+
+  <ion-toolbar style="margin: 1%" *ngIf="withdraws">
+
+    <ion-toolbar>
+      <ion-text class="ion-text-center">
+        <h4>Historial de retiros pendientes</h4>
+      </ion-text>
+    </ion-toolbar>
+
+    <ion-card *ngFor="let item of withdraws" style="margin: 3%; padding: 2%;">
+      <div class="flex horizontal4">
+        <ion-label color="primary">Usuario: </ion-label>
+        <ion-label color="primary">{{ item.user }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4">
+        <ion-label color="medium">Id: </ion-label>
+        <ion-label color="medium">{{ item.id }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4">
+        <ion-label color="medium">Fecha: </ion-label>
+        <ion-label color="medium">{{ item.time }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4">
+        <ion-label color="medium">Tipo de pago: </ion-label>
+        <ion-label color="medium">{{ item.paymentMethod }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4"*ngIf="item.paymentMethod === variables.paymentMethods[0] || item.paymentMethod === variables.paymentMethods[1]">
+        <ion-label color="medium">Banco: </ion-label>
+        <ion-label color="medium">{{ item.bank }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4"*ngIf="item.bank">
+        <ion-label color="medium">No de cuenta: </ion-label>
+        <ion-label color="medium">{{ item.bankNumber }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4"*ngIf="item.bank">
+        <ion-label color="medium">Tipo de cuenta: </ion-label>
+        <ion-label color="medium">{{ item.bankType }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4"*ngIf="item.bank">
+        <ion-label color="medium">Cuenta de: </ion-label>
+        <ion-label color="medium">{{ item.bankOwner }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4"*ngIf="item.bank">
+        <ion-label color="medium">Cédula del abonado: </ion-label>
+        <ion-label color="medium">{{ item.ownerId }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.cop > 0">
+        <ion-label color="medium">Monto: </ion-label>
+        <ion-label color="medium">COP {{ item.cop }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.usdt > 0">
+        <ion-label color="medium">Monto: </ion-label>
+        <ion-label color="medium">USDT {{ item.cop }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.direction">
+        <ion-label color="medium">Tipo: </ion-label>
+        <ion-label color="medium">{{ item.direction }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.timeDeposit">
+        <ion-label color="medium">Fecha: </ion-label>
+        <ion-label color="medium">{{ item.timeDeposit | date:'medium' }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.status === 'pending'">
+        <ion-label color="medium">Válido hasta: </ion-label>
+        <ion-label color="primary">{{ item.timeUntil | date:'medium' }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4">
+        <ion-label color="medium">Estado: </ion-label>
+        <ion-label color="medium">{{ item.status }}</ion-label>
+      </div>
+
+
+      <div *ngIf="!item.photoURL">
+        <br><br><br><br>
+      </div>
+
+      <div class="ion-text-center" style="margin-top: 3%;" *ngIf="item.photoURL">
+        <img [src]="item.photoURL" /> <br>
+        <a [href]="item.photoURL" target="_blank" rel="noopener">Descargar</a>
+      </div>
+
+      <ion-fab vertical="bottom" horizontal="end">
+        <ion-fab-button color="success" (click)="approve(item, 'withdraw')" [disabled]="item.status === 'Aprobado'">
+          <ion-icon name="checkmark-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+
+      <ion-fab vertical="bottom" horizontal="start">
+        <ion-fab-button color="danger" (click)="reject(item, 'withdraw')" [disabled]="item.status === 'Rechazado'">
+          <ion-icon name="close-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </ion-card>
+
+  </ion-toolbar>
+
+
+</ion-content>
+
+<ion-footer >
+  <ion-toolbar color="primary">
+    <ion-button color="light" expand="block" fill="clear" shape="round" (click)="saveChanges()">
+      <ion-icon color="light" slot="start" name="checkmark"></ion-icon>
+      <ion-text color="light">
+       Guarar cambios
+      </ion-text>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

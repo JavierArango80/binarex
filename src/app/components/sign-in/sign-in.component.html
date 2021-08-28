@@ -1,0 +1,132 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="1">
+        <ion-icon name="chevron-back-outline" size="large" (click)="goBack()" *ngIf="step > 1"></ion-icon>
+      </ion-col>
+      <ion-col size="10">
+        <ion-img [src]="logo"></ion-img>
+      </ion-col>
+      <ion-col size="1">
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-text style="width: 100%; margin-bottom: 15%; height: 10%; text-align: center;">
+    <div *ngIf="step === 1">
+      Inicia sesión para comenzar
+    </div>
+    <div *ngIf="step === 2">
+      Vamos a confirmar tu número de contacto
+    </div>
+    <div *ngIf="smsSend && step === 3">
+      Enviando código de seguridad...
+    </div>
+    <div *ngIf="!smsSend && step === 3">
+      Ingresa el código de verificación enviado
+    </div>
+  </ion-text>
+
+  <br><br>
+
+  <div *ngIf="step !== 4" class="flex vertical" style="height: 70%;">
+
+    <div id="firebaseui-auth-container" *ngIf="step === 1" style="width: 90%;"></div>
+    <div id="loader" *ngIf="!authUser && !ui">Cargando...</div>
+
+    <div *ngIf="authUser" style="width: 90%;">
+      <div *ngIf="step === 2">
+        <ion-item>
+          <ion-label position="floating">Número de contacto</ion-label>
+          <ion-input type="string" [(ngModel)]="fullUser.phoneNumber" class="input ion-padding-horizontal" clear-input="true"></ion-input>
+        </ion-item>
+        <br>
+        <ion-button expand="block" (click)="checkPhoneNumber()">
+          Enviar código
+        </ion-button>
+      </div>
+    </div>
+
+    <div *ngIf="authUser" style="width: 90%;">
+      <div *ngIf="step === 3">
+        <ion-item>
+          <ion-label position="floating">Ingresa el código</ion-label>
+          <ion-input type="number" [(ngModel)]="codeSMS2" class="input ion-padding-horizontal"></ion-input>
+        </ion-item>
+        <br>
+        <ion-button expand="block" [disabled]="codeReady()" (click)="OtpVerification()">
+          Confirmar código
+        </ion-button>
+        <br>
+        <ion-text style="text-align: center;" *ngIf="!smsSend">
+          <div>
+            <a (click)="sendSmsCode()">Volver a enviar código</a>
+          </div>
+        </ion-text>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="flex vertical" *ngIf="step !== 4 && variables" style="position: absolute; bottom: 5%; width: 100%;">
+    <ion-text color="medium">
+      {{ variables.help1 }}
+    </ion-text>
+    <ion-text color="medium">
+      {{ variables.help2 }}
+    </ion-text>
+  </div>
+
+  <div class="flex vertical" style="margin-left: 5%; margin-right: 5%;" *ngIf="step === 4">
+    <ion-text class="ion-padding" style="text-align: center;">
+      <h4 class="ion-text-center">Lea los términos y condiciones</h4>
+    </ion-text>
+    <ion-toolbar>
+      <p *ngIf="tyc.p1s">{{ tyc.p1s }}</p>
+      <p *ngIf="tyc.p2s">{{ tyc.p2s }}</p>
+      <p *ngIf="tyc.p3s">{{ tyc.p3s }}</p>
+      <p *ngIf="tyc.p4s">{{ tyc.p4s}}</p>
+      <p *ngIf="tyc.p5s">{{ tyc.p5s }}</p>
+      <p *ngIf="tyc.p6s">{{ tyc.p6s }}</p>
+      <p *ngIf="tyc.p7s">{{ tyc.p7s }}</p>
+      <p *ngIf="tyc.p8s">{{ tyc.p8s }}</p>
+      <p *ngIf="tyc.p9s">{{ tyc.p9s }}</p>
+      <p *ngIf="tyc.p10s">{{ tyc.p10s }}</p>
+    </ion-toolbar>
+
+    <br>
+
+    <ion-text class="ion-padding" style="text-align: center;">
+      <h4 class="ion-text-center">Read the terms and Conditions</h4>
+    </ion-text>
+    <ion-toolbar>
+      <p *ngIf="tyc.p1e">{{ tyc.p1e }}</p>
+      <p *ngIf="tyc.p2e">{{ tyc.p2e }}</p>
+      <p *ngIf="tyc.p3e">{{ tyc.p3e }}</p>
+      <p *ngIf="tyc.p4e">{{ tyc.p4e }}</p>
+      <p *ngIf="tyc.p5e">{{ tyc.p5e }}</p>
+      <p *ngIf="tyc.p6e">{{ tyc.p6e }}</p>
+      <p *ngIf="tyc.p7e">{{ tyc.p7e }}</p>
+      <p *ngIf="tyc.p8e">{{ tyc.p8e }}</p>
+      <p *ngIf="tyc.p9e">{{ tyc.p9e }}</p>
+      <p *ngIf="tyc.p10e">{{ tyc.p10e }}</p>
+    </ion-toolbar>
+
+    <ion-row>
+      <ion-col size="6">
+        <ion-button (click)="afterLogin()" expand="block" fill="solid" shape="round" color="success" class="ion-margin">
+          Aceptar
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button (click)="rejectTyC()" expand="block" fill="solid" shape="round" color="danger" class="ion-margin">
+          Rechazar
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
+
+</ion-content>

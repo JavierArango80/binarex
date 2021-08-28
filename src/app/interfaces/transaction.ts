@@ -1,0 +1,29 @@
+export interface Transaction {
+    paymentMethod?: string,
+    bank?: any,
+    cop?: number,
+    usdt?: number,
+    from?: string,
+    to?: string,
+    last4?: string;
+    paymentPlace?: string;
+    id?: string;
+    status?: string; 
+    time?: Date;
+    timeDeposit?: Date;
+    timeUntil?: Date;
+    timeUntil2?: number;
+    direction?: string;
+    photoURL?: string;
+    notes?: string;
+    userId?: string;
+    oldBalance?: number;
+    user?: string;
+    bankNumber?: number;
+    owner?: string;
+    ownerId?: string;
+    ownerIdType?: string;
+    bankType?: string;
+    bankOwner?: string;
+    ownerPhoneNumber?: string;
+}

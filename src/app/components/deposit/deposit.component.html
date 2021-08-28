@@ -1,0 +1,111 @@
+<ion-header  class="ion-no-border">
+  <app-custom-header *ngIf="usdt && fullUser"
+    [usdt]="usdt"
+    [fullUser]="fullUser">
+  </app-custom-header>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-toolbar style="margin: 5%;" *ngIf="(fullUser)" >
+    Balance actual:
+    <h2><b>COP {{ (fullUser).balance  | number: '1.0-2' }} / USDT {{ (fullUser).balanceUsdt  | number: '1.0-2' }}</b></h2>
+  </ion-toolbar>
+
+  <ion-card class="ion-no-margin" *ngIf="fullUser" style="margin: 5%;">
+
+    <ion-toolbar style="margin-top: 5%;">
+      <ion-text class="ion-text-center">
+        <h4>Depositar dinero</h4>
+      </ion-text>
+    </ion-toolbar>
+
+    <ion-item *ngIf="fullUser && variables && transaction">
+      <ion-select placeholder="Método de Pago" style="padding-left: 0; padding-right: 0; width: 100%;"
+        [(ngModel)]="transaction.paymentMethod">
+        <ion-select-option *ngFor="let item of variables.paymentMethods" [value]="item">
+          {{ item }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngIf="transaction && variables && ( transaction.paymentMethod === variables.paymentMethods[0] ||  transaction.paymentMethod === variables.paymentMethods[1])">
+      <ion-select placeholder="Banco" style="padding-left: 0; padding-right: 0; width: 100%;"
+        [(ngModel)]="transaction.bank" (ionChange)="changeBank()">
+        <ion-select-option *ngFor="let item of variables.banks" [value]="item">
+          {{ item }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <div class="flex vertical ion-padding-bottom" style="margin-top: 5%; margin-bottom: 2%; background-color:  var(--ion-color-light);"
+      *ngIf="bank && ( transaction.paymentMethod === variables.paymentMethods[0] ||  transaction.paymentMethod === variables.paymentMethods[1])">
+      <br>
+      <ion-img [src]="bank.logo" *ngIf="bank.logo "></ion-img>
+      <p><b>Banco: </b>{{ bank.bank }}</p>
+      <p><b>Titular: </b>{{ bank.owner }}</p>
+      <p><b>Nit: </b>{{ bank.nit }}</p>
+      <p><b>Tipo de cuenta: </b>{{ bank.type }}</p>
+      <p><b>Banco: </b>{{ bank.bank }}</p>
+      <p><b>Cuenta Nro: </b>{{ bank.accountNumber }}</p>
+    </div>
+
+    <ion-item *ngIf="transaction && variables && ( transaction.paymentMethod === variables.paymentMethods[2])">
+      <ion-select placeholder="Seleccione el punto de entrega del dinero" style="padding-left: 0; padding-right: 0; width: 100%;"
+        [(ngModel)]="transaction.paymentPlace" (ionChange)="changePlace()">
+        <ion-select-option *ngFor="let item of variables.paymentPlaces" [value]="item">
+          {{ item }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <div class="flex vertical ion-padding-bottom" style="margin-top: 5%; margin-bottom: 2%; background-color:  var(--ion-color-light);"
+      *ngIf="paymentPlace && ( transaction.paymentMethod === variables.paymentMethods[2])">
+      <br>
+      <p><b>Sitio de encuentro: </b>{{ paymentPlace.name }}</p>
+      <p><b>Dirección: </b>{{ paymentPlace.address }}</p>
+      <p><b>País: </b>{{ paymentPlace.country }}</p>
+      <p><b>Ciudad: </b>{{ paymentPlace.city }}</p>
+      <p><b>Horario: </b>{{ paymentPlace.timing }}</p>
+      <p><b>Persona a cargo: </b>{{ paymentPlace.person }}</p> <br>
+      <a [href]="paymentPlace.link">Ubicación</a>
+    </div>
+
+    <ion-toolbar style="margin: 5%;" *ngIf="transaction" >
+      <ion-text color="dark">
+        ¿Cuanto deseas depositar en COP?
+      </ion-text>
+      <ion-input
+        clear-input
+        type="number"
+        inputmode="numeric"
+        [(ngModel)]="transaction.cop"
+        style="margin-top: 8px;">
+      </ion-input>
+    </ion-toolbar>
+  </ion-card>
+
+</ion-content>
+
+<ion-footer class="ion-no-border" *ngIf="transaction">
+  <ion-toolbar>
+    <ion-grid class="ion-no-margin" style="width: 100%;">
+      <ion-row>
+        <ion-col size="6" class="col2">
+          <div class="ion-text-center">
+            <ion-button (click)="checkTransaction()" expand="block" shape="round" color="primary" [disabled]="transaction.cop === 0 || !transaction.cop">
+              Depositar
+            </ion-button>
+          </div>
+        </ion-col>
+        <ion-col size="6" class="col3">
+          <div class="ion-text-center">
+            <ion-button (click)="close()" expand="block" shape="round" color="medium">
+              Cancelar
+            </ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

@@ -1,17 +1,197 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
-  </ion-toolbar>
+<ion-header  class="ion-no-border">
+  <app-custom-header *ngIf="usdt && fullUser"
+    [usdt]="usdt"
+    [fullUser]="fullUser">
+  </app-custom-header>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" *ngIf="deposits" >
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+
+  <ion-toolbar style="margin: 5%;" *ngIf="fullUser" >
+    Balance actual:
+    <h4><b>COP {{ (fullUser).balance  | number: '1.0-2' }} / USDT {{ (fullUser).balanceUsdt  | number: '1.0-2' }}</b></h4>
+  </ion-toolbar>
+
+  <div>
+    <ion-toolbar>
+      <ion-text class="ion-text-center">
+        <h4>Historial depósitos</h4>
+      </ion-text>
+    </ion-toolbar>
+
+    <ion-card *ngFor="let item of deposits">
+      <div class="flex horizontal4">
+        <ion-label color="primary">Id: </ion-label>
+        <ion-label color="primary">{{ item.id }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4">
+        <ion-label color="medium">Tipo de pago: </ion-label>
+        <ion-label color="medium">{{ item.paymentMethod }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4"*ngIf="item.paymentMethod === variables.paymentMethods[0] || item.paymentMethod === variables.paymentMethods[1]">
+        <ion-label color="medium">Banco: </ion-label>
+        <ion-label color="medium">{{ item.bank }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.cop > 0">
+        <ion-label color="medium">Monto: </ion-label>
+        <ion-label color="medium">COP {{ item.cop }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.usdt > 0">
+        <ion-label color="medium">Monto: </ion-label>
+        <ion-label color="medium">USDT {{ item.cop }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.direction">
+        <ion-label color="medium">Tipo: </ion-label>
+        <ion-label color="medium">{{ item.direction }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.timeDeposit">
+        <ion-label color="medium">Fecha: </ion-label>
+        <ion-label color="medium">{{ item.timeDeposit | date:'medium' }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.status === 'pending'">
+        <ion-label color="medium">Válido hasta: </ion-label>
+        <ion-label color="primary">{{ item.timeUntil | date:'medium' }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4">
+        <ion-label color="medium">Estado: </ion-label>
+        <ion-label color="medium" [ngStyle]="{background: getColor(item.status)}">{{ item.status }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.notes">
+        <ion-label color="medium">Notas: </ion-label>
+        <ion-label color="medium">{{ item.notes }}</ion-label>
+      </div>
+
+      <div class="ion-text-center" *ngIf="!isUploading && !isUploaded && !item.photoURL && item.status === 'Pendiente'" style="margin-top: 3%;">
+        <ion-button color="primary" shape="round">
+          <span>  Cargar comprobante</span>
+          <input id="uploadBtn" type="file" class="upload" (change)="uploadFile($event.target.files, item)" />
+        </ion-button>
+      </div>
+
+      <div class="ion-text-center" *ngIf="isUploading && !isUploaded" style="margin-top: 3%;">
+        <ion-card-header>
+          <ion-card-title>Selected File:<b>{{ fileName }}</b></ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div *ngIf="percentage | async as pct">
+            Progress: {{ pct | number }}%
+            <ion-progress-bar value="{{ pct / 100 }}"></ion-progress-bar>
+          </div>
+          <div *ngIf="snapshot | async as snap">
+            File Size: {{ snap.totalBytes | fileSizePipe:false }} Transfered:
+            {{ snap.bytesTransferred | fileSizePipe:false }}
+            <div *ngIf="snapshot && snap.bytesTransferred !== snap.totalBytes">
+              <ion-button color="warning" size="small" (click)="task.pause()" class="button is-warning">Pause</ion-button>
+              <ion-button size="small" (click)="task.resume()" class="button is-info">Resume</ion-button>
+              <ion-button color="danger" size="small" (click)="task.cancel()" class="button is-danger">Cancel</ion-button>
+            </div>
+          </div>
+        </ion-card-content>
+      </div>
+
+      <div class="ion-text-center" *ngIf="!isUploading && isUploaded" style="margin-top: 3%;">
+        <ion-card-header>
+          <ion-card-title>
+            <b>{{ fileName }}</b> Descargado!
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div *ngIf="uploadedFileUrl | async as url">
+            <img [src]="url" /> <br>
+            <a [href]="url" target="_blank" rel="noopener">Descargar</a>
+          </div>
+          Tamaño del archivo: {{ fileSize | fileSizePipe:false }}
+          <ion-button expand="full" color="primary" shape="round" (click)="isUploading = isUploaded = false">
+            <span>Modificar</span>
+          </ion-button>
+        </ion-card-content>
+      </div>
+
+      <div class="ion-text-center" *ngIf="item.photoURL && !isUploaded" style="margin-top: 3%;">
+        <ion-card-content>
+          <div>
+            <img [src]="item.photoURL" />
+            <a [href]="item.photoURL" target="_blank" rel="noopener"></a>
+          </div>
+          <ion-button color="primary" shape="round" *ngIf="item.status === 'Pendiente'" >
+            <span>Modificar</span>
+            <input id="uploadBtn" type="file" class="upload" (change)="uploadFile($event.target.files, item)" />
+          </ion-button>
+        </ion-card-content>
+      </div>
+    </ion-card>
+  </div>
+
+  <div>
+
+    <ion-toolbar style="margin-top: 5%;">
+      <ion-text class="ion-text-center">
+        <h4>Historial retiros</h4>
+      </ion-text>
+    </ion-toolbar>
+
+    <ion-card *ngFor="let item of withdraws">
+      <div class="flex horizontal4">
+        <ion-label color="primary">Id: </ion-label>
+        <ion-label color="primary">{{ item.id }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4">
+        <ion-label color="medium">Tipo de pago: </ion-label>
+        <ion-label color="medium">{{ item.paymentMethod }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4"*ngIf="item.paymentMethod === variables.paymentMethods[0] || item.paymentMethod === variables.paymentMethods[1]">
+        <ion-label color="medium">Banco: </ion-label>
+        <ion-label color="medium">{{ item.bank }} - {{ item.bankNumber }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.cop > 0">
+        <ion-label color="medium">Monto: </ion-label>
+        <ion-label color="medium">COP {{ item.cop }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.usdt > 0">
+        <ion-label color="medium">Monto: </ion-label>
+        <ion-label color="medium">USDT {{ item.cop }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.direction">
+        <ion-label color="medium">Tipo: </ion-label>
+        <ion-label color="medium">{{ item.direction }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.timeDeposit">
+        <ion-label color="medium">Fecha: </ion-label>
+        <ion-label color="medium">{{ item.timeDeposit | date:'medium' }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.status === 'pending'">
+        <ion-label color="medium">Válido hasta: </ion-label>
+        <ion-label color="primary">{{ item.timeUntil | date:'medium' }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4">
+        <ion-label color="medium">Estado: </ion-label>
+        <ion-label color="medium" [ngStyle]="{background: getColor(item.status)}">{{ item.status }}</ion-label>
+      </div>
+
+      <div class="flex horizontal4" *ngIf="item.notes">
+        <ion-label color="medium">Notas: </ion-label>
+        <ion-label color="medium">{{ item.notes }}</ion-label>
+      </div>
+
+    </ion-card>
+  </div>
+
 </ion-content>

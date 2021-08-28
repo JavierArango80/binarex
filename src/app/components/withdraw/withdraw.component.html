@@ -1,0 +1,112 @@
+<ion-header  class="ion-no-border">
+  <app-custom-header *ngIf="usdt && fullUser"
+    [usdt]="usdt"
+    [fullUser]="fullUser">
+  </app-custom-header>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-toolbar style="margin: 5%;" *ngIf="(fullUser)">
+    Balance actual:
+    <h4><b>COP {{ (fullUser).balance  | number: '1.0-2' }} / USDT {{ (fullUser).balanceUsdt  | number: '1.0-2' }}</b></h4>
+  </ion-toolbar>
+
+  <ion-toolbar style="margin-top: 5%;">
+    <ion-text class="ion-text-center">
+      <h4>Retirar dinero</h4>
+    </ion-text>
+  </ion-toolbar>
+
+  <div style="margin-top: 25px;">
+    <ion-text color="medium" class="ion-margin">
+      ¿Cuanto deseas retirar en COP?
+    </ion-text>
+
+    <div class="flex vertical ion-margin" style="background-color:  var(--ion-color-light); border-radius: 5%; margin-bottom: 0 !important;">
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col size="8" *ngIf="transaction">
+            <ion-input type="number" placeholder="Valor a retirar" style="border:none;" autofocus
+              type="number"
+              inputmode="numeric"
+              (ionChange)="checkInput()"
+              [(ngModel)]="transaction.cop">
+            </ion-input>
+          </ion-col>
+          <ion-col size="4">
+            <ion-item color="transparent" lines="none">
+              <ion-label color="primary" (click)="setMax()">MAX</ion-label>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+
+  <div style="margin-top: 25px;">
+    <ion-text color="medium" class="ion-margin">
+      ¿Cómo desea recibir el dinero?
+    </ion-text>
+
+    <ion-item class="ion-margin" color="light" style="border-radius: 5%;" lines="none" *ngIf="fullUser && variables && transaction">
+      <ion-select placeholder="Método de Retiro" style="padding-left: 0; padding-right: 0; width: 100%;"
+        [(ngModel)]="transaction.paymentMethod"
+        (ionChange)="checkInput()">
+        <ion-select-option *ngFor="let item of paymentMethods" [value]="item">
+          {{ item }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+
+  <div *ngIf="transaction && transaction.paymentMethod === paymentMethods[0]" style="margin-top: 25px;">
+    <ion-text color="medium" class="ion-margin">
+      ¿A que cuenta se lo transferimos?
+    </ion-text>
+
+    <ion-item detail class="ion-margin" color="light" style="border-radius: 5%;" lines="none" (click)="userBanks()">
+      <ion-input style="border:none;"
+        readonly
+        placeholder="Seleccione la cuenta"
+        [(ngModel)]="bankNickName"
+        (ionChange)="checkInput()"
+        style="margin-top: 8px;">
+      </ion-input>
+    </ion-item>
+  </div>
+
+  <div *ngIf="transaction && transaction.paymentMethod === 'Efectivo' && false" style="margin-top: 25px;">
+    <ion-text color="medium" class="ion-margin">
+      Escoge el punto de encuentro para recibir el dinero
+    </ion-text>
+
+    <ion-item detail class="ion-margin" color="light" style="border-radius: 5%;" lines="none">
+      <ion-label color="medium">Seleccione la ubicación</ion-label>
+    </ion-item>
+  </div>
+
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-grid class="ion-no-margin" style="width: 100%;">
+      <ion-row>
+        <ion-col size="6" class="col2">
+          <div class="ion-text-center" *ngIf="transaction && paymentMethods">
+            <ion-button (click)="confirm()" expand="block" shape="round" color="primary" [disabled]="!ready">
+              Confirmar
+            </ion-button>
+          </div>
+        </ion-col>
+        <ion-col size="6" class="col3">
+          <div class="ion-text-center">
+            <ion-button (click)="close()" expand="block" shape="round" color="medium">
+              Cancelar
+            </ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

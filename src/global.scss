@@ -24,3 +24,54 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+@import '~firebaseui/dist/firebaseui.css';
+
+.expand {
+  width: 100% !important;
+  height: 100%;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+  }
+
+  .horizontal4 {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .vertical {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .vertical2 {
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
+
+  .vertical3 {
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .startFloating {
+    position: fixed;
+    z-index: 999;
+    left: 0;
+  }
+
+  .dialog-modal .modal-wrapper {
+    width: 100%;
+    height: 100%;
+  }
+
+ .button-floating-full2 {
+  position: fixed;
+  bottom: 2%;
+  z-index: 999;
+  padding-right: 10%;
+  padding-left: 10%;
+  width: 100%;
+}

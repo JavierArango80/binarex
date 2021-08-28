@@ -1,6 +1,18 @@
 {
-	"appId": "io.ionic.starter",
+	"appId": "com.binarex.app",
 	"appName": "Binarex",
 	"webDir": "www",
-	"bundledWebRuntime": false
+	"bundledWebRuntime": false,
+	"plugins": {
+		"GoogleAuth": {
+		  "scopes": [
+			"profile",
+			"email"
+		  ],
+		  "serverClientId": "727209895183-atcrcgnkuvtrt8gim87ate51h33d34cc.apps.googleusercontent.com",
+		  "forceCodeForRefreshToken": true
+		}
+	}
 }
+
+

@@ -8,16 +8,20 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
+    "module": "esnext",
     "moduleResolution": "node",
     "importHelpers": true,
+    "resolveJsonModule": true,
     "target": "es2015",
-    "module": "es2020",
+    // "module": "es2020",
     "lib": ["es2018", "dom"]
   },
   "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false,
+    "fullTemplateTypeCheck": true,
+    // "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true
+    // "strictInputAccessModifiers": true,
+    // "strictTemplates": true
+    "types" : ["node"]
   }
 }

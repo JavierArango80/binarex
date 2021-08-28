@@ -1,17 +1,47 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
-  </ion-toolbar>
+<ion-header  class="ion-no-border">
+  <app-custom-header *ngIf="usdt && fullUser"
+    [usdt]="usdt"
+    [fullUser]="fullUser">
+  </app-custom-header>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  <ion-toolbar style="margin-top: 5%;">
+    <ion-text class="ion-text-center">
+      <h4>Compra y venta</h4>
+    </ion-text>
+  </ion-toolbar>
+
+  <ion-toolbar style="margin: 5%;" *ngIf="fullUser" >
+    Balance actual:
+    <h4><b>COP {{ (fullUser).balance  | number: '1.0-2' }} / USDT {{ (fullUser).balanceUsdt  | number: '1.0-2' }}</b></h4>
+  </ion-toolbar>
+
+  <ion-item color="primary" style="opacity: 1;" (click)="openDeposit()">
+    <ion-label class="buttonText"><b>Depositar COP</b></ion-label>
+    <ion-icon name="arrow-undo-outline" slot="end"></ion-icon>
+    <ion-icon slot="end" name="cash-outline"></ion-icon>
+  </ion-item>
+
+  <ion-item color="primary" style="opacity: 0.9;" (click)="openTransfer('buy')">
+    <ion-label class="buttonText"><b>Comprar Crypto</b></ion-label>
+    <ion-icon slot="end" name="cash-outline"></ion-icon>
+    <ion-icon slot="end" name="swap-horizontal-outline"></ion-icon>
+    <ion-icon slot="end" name="logo-bitcoin"></ion-icon>
+  </ion-item>
+
+  <ion-item color="primary" style="opacity: 0.8;" (click)="openTransfer('sell')">
+    <ion-label class="buttonText"><b>Vender Crypto</b></ion-label>
+    <ion-icon slot="end" name="logo-bitcoin"></ion-icon>
+    <ion-icon slot="end" name="swap-horizontal-outline"></ion-icon>
+    <ion-icon slot="end" name="cash-outline"></ion-icon>
+  </ion-item>
+
+  <ion-item color="primary" style="opacity: 0.7;" (click)="openWithdraw()">
+    <ion-label class="buttonText"><b>Retirar COP</b></ion-label>
+    <ion-icon slot="end" name="cash-outline"></ion-icon>
+    <ion-icon name="arrow-redo-outline" slot="end"></ion-icon>
+  </ion-item>
+
 </ion-content>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "727209895183",
+    "project_id": "binarex-2021",
+    "storage_bucket": "binarex-2021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727209895183:android:7f1e79be90aac68550ca7a",
+        "android_client_info": {
+          "package_name": "com.binarex.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "727209895183-96ntiblj0itdvtm76p2vp9k1ullj0e2h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.binarex.app",
+            "certificate_hash": "21db167189b3d1a598ea888abeaf69b4966aaf0f"
+          }
+        },
+        {
+          "client_id": "727209895183-atcrcgnkuvtrt8gim87ate51h33d34cc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFrcIklIjI7BSQO6cgz5gJ9AQgfXIb6gA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "727209895183-atcrcgnkuvtrt8gim87ate51h33d34cc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

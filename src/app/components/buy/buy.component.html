@@ -1,0 +1,149 @@
+<ion-header  class="ion-no-border">
+  <app-custom-header *ngIf="usdt && fullUser"
+    [usdt]="usdt"
+    [fullUser]="fullUser">
+  </app-custom-header>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="transaction && fullUser">
+
+  <ion-toolbar style="margin: 5%;" *ngIf="(fullUser)" >
+    Balance actual:
+    <h4><b>COP {{ (fullUser).balance  | number: '1.0-2' }} / USDT {{ (fullUser).balanceUsdt  | number: '1.0-2' }}</b></h4>
+  </ion-toolbar>
+
+
+  <ion-toolbar>
+    <ion-text class="ion-text-center">
+      <h4>Convertir</h4>
+    </ion-text>
+  </ion-toolbar>
+
+  <div class="flex vertical ion-margin" style="background-color:  var(--ion-color-light); border-radius: 5%;">
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="1.5">
+          <ion-icon name="cash-outline" color="primary" style="width: 100%; font-size: x-large;" *ngIf="mode === 'buy'" ></ion-icon>
+          <ion-icon name="logo-bitcoin" color="secondary" style="width: 100%; font-size: x-large;" *ngIf="mode === 'sell'"></ion-icon>
+        </ion-col>
+        <ion-col size="3">
+          <ion-text color="medium" style="width: 100%;">
+            Desde
+          </ion-text>
+        </ion-col>
+        <ion-col size="6" *ngIf="transaction">
+          <ion-text color="medium" style="width: 100%;">
+            Balance {{ transaction.from }}
+          </ion-text>
+        </ion-col>
+        <ion-col size="1.5"></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="1.5">
+          <ion-icon name="arrow-down-outline" color="medium" style="font-size: x-large; width: 100%;"></ion-icon>
+        </ion-col>
+        <ion-col size="3"></ion-col>
+        <ion-col size="6"></ion-col>
+        <ion-col size="1.5">
+          <ion-icon name="swap-vertical" color="primary" style="font-size: xx-large; width: 100%;" (click)="swapMode()"></ion-icon>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="1.5">
+          <ion-icon name="logo-bitcoin" color="secondary" style="width: 100%; font-size: x-large;" *ngIf="mode === 'buy'"></ion-icon>
+          <ion-icon name="cash-outline" color="primary" style="width: 100%; font-size: x-large;" *ngIf="mode === 'sell'" ></ion-icon>
+        </ion-col>
+        <ion-col size="3">
+          <ion-text color="medium" style="width: 100%;">
+            A
+          </ion-text>
+        </ion-col>
+        <ion-col size="6" *ngIf="transaction">
+          <ion-text color="dark" style="width: 100%;">
+            Balance {{ transaction.to }}
+          </ion-text>
+        </ion-col>
+        <ion-col size="1.5"></ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <br>
+
+  <ion-text color="medium" class="ion-margin">
+    Monto en {{ transaction.from }}
+  </ion-text>
+
+  <div class="flex vertical ion-margin" style="background-color:  var(--ion-color-light); border-radius: 5%; margin-bottom: 0 !important;">
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="8" *ngIf="transaction">
+          <ion-input type="number" placeholder="Valor a convertir" style="border:none;" autofocus
+            type="number"
+            inputmode="numeric"
+            [(ngModel)]="amount1"
+            (ionChange)="calculateUsdt($event)">
+          </ion-input>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item color="transparent" lines="none">
+            <!-- <ion-label color="medium">{{ transaction.from }}</ion-label> -->
+            <ion-label color="primary" (click)="setMax()">MAX</ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <br><br>
+
+  <ion-text color="medium" class="ion-margin">
+    Monto en {{ transaction.to }}
+  </ion-text>
+
+  <div class="flex vertical ion-margin" style="background-color:  var(--ion-color-light); border-radius: 5%; margin-bottom: 0 !important;">
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="8" *ngIf="transaction">
+          <ion-input type="number" style="border:none;"
+            readonly
+            type="number"
+            inputmode="numeric"
+            value="{{ amount2 }}">
+          </ion-input>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item color="transparent" lines="none">
+            <ion-label color="medium">{{ transaction.to }}</ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <ion-text color="medium" style="font-size: small;" class="ion-margin">
+    Balance disponible: COP {{ (fullUser).balance  | number: '1.0-2' }}
+  </ion-text>
+
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-grid class="ion-no-margin" style="width: 100%;">
+      <ion-row>
+        <ion-col size="6" class="col2">
+          <div class="ion-text-center">
+            <ion-button (click)="confirm()" expand="block" shape="round" color="primary" [disabled]="!ready">
+              Convertir
+            </ion-button>
+          </div>
+        </ion-col>
+        <ion-col size="6" class="col3">
+          <div class="ion-text-center">
+            <ion-button (click)="close()" expand="block" shape="round" color="medium">
+              Cancelar
+            </ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>
